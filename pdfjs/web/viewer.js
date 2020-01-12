@@ -1785,6 +1785,7 @@ var validateFileURL;
       if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
         return;
       }
+      return
 
       var _ref8 = new URL(file, window.location.href),
           origin = _ref8.origin,

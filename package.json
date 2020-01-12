@@ -1,5 +1,5 @@
 {
-  "name": "electron-pdf-window",
+  "name": "@rocket-monkey/electron-pdf-window",
   "version": "1.0.12",
   "description": "view PDF files in electron browser windows",
   "main": "index.js",

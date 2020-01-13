@@ -1,6 +1,6 @@
 {
   "name": "@rocket-monkey/electron-pdf-window",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "view PDF files in electron browser windows",
   "main": "index.js",
   "scripts": {

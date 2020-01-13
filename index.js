@@ -81,9 +81,6 @@ class PDFWindow extends BrowserWindow {
   }
 
   loadURL(url, options) {
-    if (options.postData) {
-      localStorage.setItem("postData", JSON.stringify(options.postData));
-    }
     isPDF(url)
       .then(isit => {
         if (isit) {
@@ -119,9 +116,6 @@ PDFWindow.addSupport = function(browserWindow) {
 
   const load = browserWindow.loadURL;
   browserWindow.loadURL = function(url, options) {
-    if (options.postData) {
-      localStorage.setItem("postData", JSON.stringify(options.postData));
-    }
     isPDF(url).then(isit => {
       if (isit) {
         load.call(

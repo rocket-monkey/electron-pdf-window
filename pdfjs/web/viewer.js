@@ -1929,23 +1929,9 @@ var webViewerOpenFileViaURL;
         PDFViewerApplication.open(new Uint8Array(xhr.response));
       };
 
-      var postDataStr = localStorage.getItem("postData");
-      var postData = postDataStr ? JSON.parse(postDataStr) : null;
-
-      if (postData) {
-        xhr.open("POST", file, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.responseType = "arraybuffer";
-        xhr.send(Object.keys(postData).map(function (k) {
-          var v = postData[k];
-          return "".concat(k, "=").concat(v);
-        }).join("&"));
-      } else {
-        xhr.open("GET", file);
-        xhr.responseType = "arraybuffer";
-        xhr.send();
-      }
-
+      xhr.open("GET", file);
+      xhr.responseType = "arraybuffer";
+      xhr.send();
       return;
     }
 

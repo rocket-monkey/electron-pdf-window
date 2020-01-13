@@ -4287,7 +4287,7 @@ var defaultOptions = {
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   imageResourcesPath: {
-    value: './images/',
+    value: './imgs/',
     kind: OptionKind.VIEWER
   },
   maxCanvasPixels: {

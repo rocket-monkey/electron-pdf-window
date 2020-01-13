@@ -1794,37 +1794,7 @@ var PDFViewerApplication = {
 exports.PDFViewerApplication = PDFViewerApplication;
 var validateFileURL;
 {
-  var HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io"];
-
-  validateFileURL = function validateFileURL(file) {
-    if (file === undefined) {
-      return;
-    }
-
-    try {
-      var viewerOrigin = new URL(window.location.href).origin || "null";
-
-      if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
-        return;
-      }
-
-      var _ref8 = new URL(file, window.location.href),
-          origin = _ref8.origin,
-          protocol = _ref8.protocol;
-
-      if (origin !== viewerOrigin && protocol !== "blob:") {
-        throw new Error("file origin does not match viewer's");
-      }
-    } catch (ex) {
-      var message = ex && ex.message;
-      PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(function (loadingErrorMessage) {
-        PDFViewerApplication.error(loadingErrorMessage, {
-          message: message
-        });
-      });
-      throw ex;
-    }
-  };
+  validateFileURL = function validateFileURL(file) {};
 }
 
 function loadFakeWorker() {
@@ -1959,9 +1929,23 @@ var webViewerOpenFileViaURL;
         PDFViewerApplication.open(new Uint8Array(xhr.response));
       };
 
-      xhr.open("GET", file);
-      xhr.responseType = "arraybuffer";
-      xhr.send();
+      var postDataStr = localStorage.getItem("postData");
+      var postData = postDataStr ? JSON.parse(postDataStr) : null;
+
+      if (postData) {
+        xhr.open("POST", file, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.responseType = "arraybuffer";
+        xhr.send(Object.keys(postData).map(function (k) {
+          var v = postData[k];
+          return "".concat(k, "=").concat(v);
+        }).join("&"));
+      } else {
+        xhr.open("GET", file);
+        xhr.responseType = "arraybuffer";
+        xhr.send();
+      }
+
       return;
     }
 
@@ -2002,8 +1986,8 @@ function webViewerPageRendered(evt) {
 
 function webViewerTextLayerRendered(evt) {}
 
-function webViewerPageMode(_ref9) {
-  var mode = _ref9.mode;
+function webViewerPageMode(_ref8) {
+  var mode = _ref8.mode;
   var view;
 
   switch (mode) {
@@ -2049,9 +2033,9 @@ function webViewerNamedAction(evt) {
   }
 }
 
-function webViewerPresentationModeChanged(_ref10) {
-  var active = _ref10.active,
-      switchInProgress = _ref10.switchInProgress;
+function webViewerPresentationModeChanged(_ref9) {
+  var active = _ref9.active,
+      switchInProgress = _ref9.switchInProgress;
   var state = _ui_utils.PresentationModeState.NORMAL;
 
   if (switchInProgress) {
@@ -2288,8 +2272,8 @@ function webViewerFindFromUrlHash(evt) {
   });
 }
 
-function webViewerUpdateFindMatchesCount(_ref11) {
-  var matchesCount = _ref11.matchesCount;
+function webViewerUpdateFindMatchesCount(_ref10) {
+  var matchesCount = _ref10.matchesCount;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindMatchesCount(matchesCount);
@@ -2298,10 +2282,10 @@ function webViewerUpdateFindMatchesCount(_ref11) {
   }
 }
 
-function webViewerUpdateFindControlState(_ref12) {
-  var state = _ref12.state,
-      previous = _ref12.previous,
-      matchesCount = _ref12.matchesCount;
+function webViewerUpdateFindControlState(_ref11) {
+  var state = _ref11.state,
+      previous = _ref11.previous,
+      matchesCount = _ref11.matchesCount;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindControlState({

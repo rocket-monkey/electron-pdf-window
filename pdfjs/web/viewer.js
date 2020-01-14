@@ -12863,10 +12863,6 @@ function () {
       eventName: "presentationmode",
       close: true
     }, {
-      element: options.openFileButton,
-      eventName: "openfile",
-      close: true
-    }, {
       element: options.printButton,
       eventName: "print",
       close: true
